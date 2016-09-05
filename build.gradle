@@ -1,0 +1,36 @@
+group 'WWW'
+version '1.0'
+
+
+
+apply plugin: 'groovy'
+apply plugin:'application'
+mainClassName = 'gd.WQ'
+
+
+repositories {
+    mavenCentral()
+
+}
+
+
+jar {
+    manifest {
+        attributes "Main-Class": mainClassName
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
+    compile 'org.codehaus.groovy:groovy-all:2.3.11'
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+task uberjar(type: Jar) {
+    from files(sourceSets.main.output.classesDir)
+    from configurations.runtime.asFileTree.files.collect { zipTree(it) }
+
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}
